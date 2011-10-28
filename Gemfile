@@ -1,11 +1,13 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
+gem 'bootstrapped', :git => "git@github.com:jipiboily/bootstrapped.git"
 
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
+# gem 'delayed_job' # Éventuellement, pour les jobs en backgrounds
+# gem "sorcery" # Éventuellement, pour auth
+# gem 'client_side_validations' # Éventuellement, pour client side validation en javascript basé sur les validations du model
 
-gem 'sqlite3'
+### gem 'sqlite3'
 
 
 # Gems used only for assets and not required
@@ -14,6 +16,11 @@ group :assets do
   gem 'sass-rails',   '~> 3.1.4'
   gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier', '>= 1.0.3'
+end
+
+# PRODUCTION
+group :production do
+	gem 'thin'
 end
 
 gem 'jquery-rails'
