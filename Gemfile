@@ -7,7 +7,7 @@ gem 'bootstrapped', :git => "git@github.com:jipiboily/bootstrapped.git"
 # gem "sorcery" # Éventuellement, pour auth
 # gem 'client_side_validations' # Éventuellement, pour client side validation en javascript basé sur les validations du model
 
-### gem 'sqlite3'
+gem 'sqlite3'
 
 
 # Gems used only for assets and not required
