@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
-gem 'bootstrapped', :git => "git@github.com:jipiboily/bootstrapped.git"
+###gem 'bootstrapped', :git => "git@github.com:jipiboily/bootstrapped.git"
 
 # gem 'delayed_job' # Éventuellement, pour les jobs en backgrounds
 # gem "sorcery" # Éventuellement, pour auth
