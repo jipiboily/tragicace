@@ -3,6 +3,7 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $(document).ready ->
-	$(".pills > li").click ->
-		$(".pills > li").toggleClass "active"
-		$(".pill_content").toggle()
+	$(".nav > li").click ->
+		if $(this).hasClass("active") == false
+			$(".nav > li").toggleClass "active"
+			$(".tragi_content").toggle()

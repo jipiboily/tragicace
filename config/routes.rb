@@ -1,6 +1,7 @@
 Tragicace::Application.routes.draw do
   root :to => 'home#index'
-  
+  get "geo_svc/all_travaux" => "home#all_travaux"
+  get "geo_svc/travail_detail/:id" => "home#get_travail_detail"
   get 'home/randomLatLon'
 
   # The priority is based upon order of creation:
