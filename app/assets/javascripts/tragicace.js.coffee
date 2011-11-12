@@ -1,4 +1,5 @@
 window.tragicace = {}
+window.tragicace.list = {}
 window.tragicace.map = {}
 (window.tragicace = ->
 	tragicace.get_travaux_between = (from, to) ->
@@ -13,6 +14,29 @@ window.tragicace.map = {}
 				else
 					if data[0] != undefined
 						tragicace.map.show_points data
+						tragicace.list.populate data
+)()
+
+(window.tragicace.list = ->
+	tragicace.list.populate = (points) ->
+    i = 0
+    content = ""
+    point = points[i]
+    while point != undefined && point.id != undefined
+      endroit = if point.endroit == null then "???" else point.endroit
+      content += "<div>"
+      content += "<h1>" + endroit + "</h1>"
+      content += "<h3>Du " + point.date_debut + " au " + point.date_fin + "</h3>"
+      content += "<p>"
+      content += "<br/><strong>Arrondissement: </strong>" + point.arrondissement
+      content += "<br/><strong>Emplacement: </strong>" + point.emplacement
+      content += "<br/><strong>Restriction: </strong>" + point.restriction
+      content += "<br/><strong>Nature des travaux: </strong>" + point.nature_travaux
+      content += "</p>"
+      content += "</div>"
+      i++
+      point = points[i]
+    $("#liste").html content
 )()
 (tragicace.map = ->
   tragicace.map.init = ->
@@ -21,6 +45,7 @@ window.tragicace.map = {}
       dataType: "json"
       success: (points) ->
         tragicace.map.show_points points
+        tragicace.list.populate points
 
   tragicace.map.show_points = (points) ->
     center = new google.maps.LatLng(46.815876, -71.28156)
