@@ -11,12 +11,19 @@ window.map;
 			data: post_data
 			url: "geo_svc/travaux_between"
 			dataType: "json"
+			error: (data) ->
+				alert data.responseText
 			success: (data) ->
 				if(data.status != undefined)
 					alert "Erreur Google Map: " + data.status
 				else
 					if data[0] != undefined
 						tragicace.map.set_icon_on_path data
+						map = tragicace.map.show_points data
+						path =  google.maps.geometry.encoding.decodePath data.encodedPolyline
+						tragicace.map.draw_path map, path
+						bounds = tragicace.map.get_bounds path
+						map.fitBounds(bounds)
 						tragicace.list.populate data
 )()
 
@@ -63,6 +70,37 @@ window.map;
       google.maps.event.trigger map, "bidon_set_icon", point.id, 'images/closedroad.png'
       i++
       point = points[i]
+
+  tragicace.map.get_bounds = (path) ->
+    minLatitude = null
+    maxLatitude = null
+    minLongitude = null
+    maxLongitude = null
+    i=0
+
+    while i < path.length
+      point = path[i]
+      i++
+      if (point.Oa isnt 180.0) or (point.Pa isnt 180.0)
+        minLatitude = point.Oa  if (not (minLatitude?)) or (point.Oa < minLatitude)
+        maxLatitude = point.Oa  if (not (maxLatitude?)) or (point.Oa > maxLatitude)
+        minLongitude = point.Pa  if (not (minLongitude?)) or (point.Pa < minLongitude)
+        maxLongitude = point.Pa  if (not (maxLongitude?)) or (point.Pa > maxLongitude)
+
+    sw = new google.maps.LatLng(minLatitude, minLongitude)
+    ne = new google.maps.LatLng(maxLatitude, maxLongitude)
+    new google.maps.LatLngBounds(sw, ne)
+
+  tragicace.map.draw_path = (map, path) ->
+    polyline = new google.maps.Polyline(
+      path: path
+      strokeColor: "#FF0000"
+      strokeOpacity: 1.0
+      strokeWeight: 2
+    )
+
+    polyline.setMap map
+
   tragicace.map.show_points = (points) ->
     markers = []
     i = 0
@@ -80,6 +118,7 @@ window.map;
       i++
       point = points[i]
     markerCluster = new MarkerClusterer(map, markers)
+    map
 
   tragicace.map.bind_marker_event = (marker, position, map, id) ->
     infowindow = tragicace.map.get_info_window_instance(position)
