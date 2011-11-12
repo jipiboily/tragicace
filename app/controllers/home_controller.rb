@@ -7,7 +7,7 @@ class HomeController < ApplicationController
   end
 
   def randomLatLon
-    url = URI.parse('http://50.57.46.42')
+    url = URI.parse('http://50.57.44.203')
     res = Net::HTTP.start(url.host, url.port) {|http|
         http.get('/services/tragicace/randomLatLon.php?nb=300')
     }
@@ -16,7 +16,7 @@ class HomeController < ApplicationController
   end
   
   def all_travaux
-    url = URI.parse('http://50.57.46.42')
+    url = URI.parse('http://50.57.44.203')
     res = Net::HTTP.start(url.host, url.port) {|http|
         http.get('/services/tragicace/get_all_travaux.php')
     }
@@ -25,7 +25,7 @@ class HomeController < ApplicationController
   end
   
   def get_travail_detail
-    url = URI.parse('http://50.57.46.42')
+    url = URI.parse('http://50.57.44.203')
     res = Net::HTTP.start(url.host, url.port) {|http|
         http.get('/services/tragicace/get_travail.php?id=' + params[:id].to_i.to_s)
     }
@@ -39,7 +39,7 @@ class HomeController < ApplicationController
   
   private
     def geo_svc_url
-      URI.parse('http://50.57.46.42')
+      URI.parse('http://50.57.44.203')
     end
     
     def geo_svc_res get_url
