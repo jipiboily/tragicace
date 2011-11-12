@@ -1,4 +1,18 @@
-<form class="pull-left" action="">
-	<input type="text" placeholder="Départ">
-	<input type="text" placeholder="Arrivée">
+<form id="trajet" class="pull-left" action="">
+	<input type="text" placeholder="Départ" id="depart">
+	<input type="text" placeholder="Arrivée" id="arrivee">
+	<button class="btn">Go!</button>
 </form>
+
+<div id="modal-erreur" class="modal hide fade" style="display: none; ">
+  <div class="modal-header">
+    <a href="#" class="close">×</a>
+    <h3>ERREUR</h3>
+  </div>
+  <div class="modal-body">
+    <p>...</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn primary close_modal">Annuler</a>
+  </div>
+</div>

@@ -1,6 +1,18 @@
-tragicace = {}
-tragicace.map = {}
-(tragicace = ->
+window.tragicace = {}
+window.tragicace.map = {}
+(window.tragicace = ->
+	tragicace.get_travaux_between = (from, to) ->
+		post_data = {from: from, to: to}
+		$.ajax
+			data: post_data
+			url: "geo_svc/travaux_between"
+			dataType: "json"
+			success: (data) ->
+				if(data.status != undefined)
+					alert "Erreur Google Map: " + data.status
+				else
+					if data[0] != undefined
+						tragicace.map.show_points data
 )()
 (tragicace.map = ->
   tragicace.map.init = ->
@@ -19,9 +31,8 @@ tragicace.map = {}
     )
     markers = []
     i = 0
-
-    while i < points.length
-      point = points[i]
+    point = points[i]
+    while point != undefined && point.id != undefined
       latLng = new google.maps.LatLng(point.lat, point.lon)
       marker = new google.maps.Marker(
         position: latLng
@@ -30,6 +41,7 @@ tragicace.map = {}
       tragicace.map.bind_marker_event marker, latLng, map, point.id
       markers.push marker
       i++
+      point = points[i]
     markerCluster = new MarkerClusterer(map, markers)
 
   tragicace.map.bind_marker_event = (marker, position, map, id) ->

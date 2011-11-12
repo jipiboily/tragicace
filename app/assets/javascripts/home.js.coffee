@@ -7,3 +7,10 @@ $(document).ready ->
 		if $(this).hasClass("active") == false
 			$(".nav > li").toggleClass "active"
 			$(".tragi_content").toggle()
+
+	$("#trajet > button").click (e) ->
+		e.preventDefault()
+		if $("#depart").val().length + $("#arrivee").val().length == 0
+			tragicace.map.init()
+		else
+			tragicace.get_travaux_between $("#depart").val(), $("#arrivee").val()
