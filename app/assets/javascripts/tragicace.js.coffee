@@ -1,6 +1,9 @@
 window.tragicace = {}
 window.tragicace.list = {}
 window.tragicace.map = {}
+
+
+window.map;
 (window.tragicace = ->
 	tragicace.get_travaux_between = (from, to) ->
 		post_data = {from: from, to: to}
@@ -13,7 +16,7 @@ window.tragicace.map = {}
 					alert "Erreur Google Map: " + data.status
 				else
 					if data[0] != undefined
-						tragicace.map.show_points data
+						tragicace.map.set_icon_on_path data
 						tragicace.list.populate data
 )()
 
@@ -40,6 +43,12 @@ window.tragicace.map = {}
 )()
 (tragicace.map = ->
   tragicace.map.init = ->
+    center = new google.maps.LatLng(46.815876, -71.28156)
+    window.map = new google.maps.Map(document.getElementById("map"),
+      zoom: 11
+      center: center
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    )
     $.ajax
       url: "geo_svc/all_travaux"
       dataType: "json"
@@ -47,13 +56,14 @@ window.tragicace.map = {}
         tragicace.map.show_points points
         tragicace.list.populate points
 
+  tragicace.map.set_icon_on_path = (points) ->
+    i = 0
+    point = points[i]
+    while point != undefined && point.id != undefined
+      google.maps.event.trigger map, "bidon_set_icon", point.id, 'images/closedroad.png'
+      i++
+      point = points[i]
   tragicace.map.show_points = (points) ->
-    center = new google.maps.LatLng(46.815876, -71.28156)
-    map = new google.maps.Map(document.getElementById("map"),
-      zoom: 11
-      center: center
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    )
     markers = []
     i = 0
     point = points[i]
@@ -62,8 +72,10 @@ window.tragicace.map = {}
       marker = new google.maps.Marker(
         position: latLng
         map: map
+        point_id: point.id
       )
       tragicace.map.bind_marker_event marker, latLng, map, point.id
+      marker.setIcon('images/closedroad_default.png')
       markers.push marker
       i++
       point = points[i]
@@ -73,6 +85,13 @@ window.tragicace.map = {}
     infowindow = tragicace.map.get_info_window_instance(position)
     google.maps.event.addListener map, "close_all_info_window", ->
       infowindow.close()
+
+    google.maps.event.addListener map, "reset_icon", ->
+      marker.setIcon('images/closedroad_default.png')
+
+    google.maps.event.addListener map, "bidon_set_icon", (id, icon) ->
+      if id == marker.point_id
+        marker.setIcon(icon)
 
     google.maps.event.addListener marker, "click", ->
       google.maps.event.trigger map, "close_all_info_window"
@@ -104,4 +123,5 @@ window.tragicace.map = {}
         infowindow.open map, marker
 )()
 
-google.maps.event.addDomListener window, "load", tragicace.map.init()
+$(document).ready ->
+	google.maps.event.addDomListener window, "load", tragicace.map.init()
