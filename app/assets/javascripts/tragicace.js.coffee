@@ -1,7 +1,8 @@
 window.tragicace = {}
 window.tragicace.list = {}
 window.tragicace.map = {}
-
+window.okPolyline = null
+window.errorPolyline = null
 
 window.map;
 (window.tragicace = ->
@@ -20,13 +21,23 @@ window.map;
                     if data[0] != undefined
                         tragicace.map.set_icon_on_path data
                         map = tragicace.map.show_points data
-                        path =  google.maps.geometry.encoding.decodePath data.encodedPolyline
-                        tragicace.map.draw_path map, path, '#C84663', 6
-                        alternativePath =  google.maps.geometry.encoding.decodePath data.encodedPolylineAlternative
-                        tragicace.map.draw_path map, alternativePath, '#42826C', 4
-                        bounds = tragicace.map.get_bounds path
-                        map.fitBounds(bounds)
                         tragicace.list.populate data
+
+                    map = window.map
+
+                    window.okPolyline.setMap(null) if window.okPolyline
+                    window.errorPolyline.setMap(null) if window.errorPolyline
+
+                    path = google.maps.geometry.encoding.decodePath data.encodedPolyline
+                    color = if data.encodedPolylineAlternative then '#C84663' else '#42826C'
+                    window.okPolyline = tragicace.map.draw_path map, path, color, 6
+
+                    if data.encodedPolylineAlternative
+                        alternativePath =  google.maps.geometry.encoding.decodePath data.encodedPolylineAlternative
+                        window.errorPolyline = tragicace.map.draw_path map, alternativePath, '#42826C', 4
+
+                    bounds = tragicace.map.get_bounds path
+                    map.fitBounds(bounds)
 )()
 
 (window.tragicace.list = ->
@@ -101,6 +112,7 @@ window.map;
       strokeWeight: width
     )
     polyline.setMap map
+    polyline
 
   tragicace.map.show_points = (points) ->
     markers = []
