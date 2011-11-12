@@ -18,6 +18,8 @@ window.tragicace.map = {}
 						map = tragicace.map.show_points data
 						path =  google.maps.geometry.encoding.decodePath data.encodedPolyline
 						tragicace.map.draw_path map, path
+						bounds = tragicace.map.get_bounds path
+						map.fitBounds(bounds)
 						tragicace.list.populate data
 )()
 
@@ -50,6 +52,26 @@ window.tragicace.map = {}
       success: (points) ->
         tragicace.map.show_points points
         tragicace.list.populate points
+
+  tragicace.map.get_bounds = (path) ->
+    minLatitude = null
+    maxLatitude = null
+    minLongitude = null
+    maxLongitude = null
+    i=0
+
+    while i < path.length
+      point = path[i]
+      i++
+      if (point.Oa isnt 180.0) or (point.Pa isnt 180.0)
+        minLatitude = point.Oa  if (not (minLatitude?)) or (point.Oa < minLatitude)
+        maxLatitude = point.Oa  if (not (maxLatitude?)) or (point.Oa > maxLatitude)
+        minLongitude = point.Pa  if (not (minLongitude?)) or (point.Pa < minLongitude)
+        maxLongitude = point.Pa  if (not (maxLongitude?)) or (point.Pa > maxLongitude)
+
+    sw = new google.maps.LatLng(minLatitude, minLongitude)
+    ne = new google.maps.LatLng(maxLatitude, maxLongitude)
+    new google.maps.LatLngBounds(sw, ne)
 
   tragicace.map.draw_path = (map, path) ->
     polyline = new google.maps.Polyline(
