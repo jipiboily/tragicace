@@ -8,12 +8,16 @@ window.tragicace.map = {}
 			data: post_data
 			url: "geo_svc/travaux_between"
 			dataType: "json"
+			error: (data) ->
+				alert data.responseText
 			success: (data) ->
 				if(data.status != undefined)
 					alert "Erreur Google Map: " + data.status
 				else
 					if data[0] != undefined
-						tragicace.map.show_points data
+						map = tragicace.map.show_points data
+						path =  google.maps.geometry.encoding.decodePath data.encodedPolyline
+						tragicace.map.draw_path map, path
 						tragicace.list.populate data
 )()
 
@@ -47,6 +51,17 @@ window.tragicace.map = {}
         tragicace.map.show_points points
         tragicace.list.populate points
 
+  tragicace.map.draw_path = (map, path) ->
+    polyline = new google.maps.Polyline(
+      path: path
+      strokeColor: "#FF0000"
+      strokeOpacity: 1.0
+      strokeWeight: 2
+    )
+
+    polyline.setMap map
+   
+
   tragicace.map.show_points = (points) ->
     center = new google.maps.LatLng(46.815876, -71.28156)
     map = new google.maps.Map(document.getElementById("map"),
@@ -68,6 +83,7 @@ window.tragicace.map = {}
       i++
       point = points[i]
     markerCluster = new MarkerClusterer(map, markers)
+    map
 
   tragicace.map.bind_marker_event = (marker, position, map, id) ->
     infowindow = tragicace.map.get_info_window_instance(position)
