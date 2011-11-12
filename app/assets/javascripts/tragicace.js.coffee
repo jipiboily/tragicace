@@ -114,7 +114,7 @@ window.map;
         point_id: point.id
       )
       tragicace.map.bind_marker_event marker, latLng, map, point.id
-      marker.setIcon('images/closedroad_default.png')
+      marker.setIcon('assets/closedroad_default.png')
       markers.push marker
       i++
       point = points[i]
@@ -127,7 +127,7 @@ window.map;
       infowindow.close()
 
     google.maps.event.addListener map, "reset_icon", ->
-      marker.setIcon('images/closedroad_default.png')
+      marker.setIcon('assets/closedroad_default.png')
 
     google.maps.event.addListener map, "bidon_set_icon", (id, icon) ->
       if id == marker.point_id
