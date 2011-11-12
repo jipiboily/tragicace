@@ -14,3 +14,10 @@ $(document).ready ->
 			tragicace.map.init()
 		else
 			tragicace.get_travaux_between $("#depart").val(), $("#arrivee").val()
+	$("#drawPolyline").click (e) ->
+		e.preventDefault()
+		polyline = $('#polyline').val()
+		path =  google.maps.geometry.encoding.decodePath polyline
+		tragicace.map.draw_path map, path
+		bounds = tragicace.map.get_bounds path
+		map.fitBounds(bounds)
