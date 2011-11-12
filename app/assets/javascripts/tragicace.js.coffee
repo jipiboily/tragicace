@@ -100,6 +100,17 @@ window.map;
     )
 
     polyline.setMap map
+   
+
+  tragicace.map.show_points = (points) ->
+    center = new google.maps.LatLng(46.815876, -71.28156)
+    map = new google.maps.Map(document.getElementById("map"),
+      zoom: 11
+      center: center
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    )
+
+    polyline.setMap map
 
   tragicace.map.show_points = (points) ->
     markers = []
