@@ -16,8 +16,9 @@ $(document).ready ->
 			tragicace.get_travaux_between $("#depart").val(), $("#arrivee").val()
 	$("#drawPolyline").click (e) ->
 		e.preventDefault()
-		polyline = $('#polyline').val()
+		polyline =  $('#polyline').val().replace(/\\\\/g, "\\")
+
 		path =  google.maps.geometry.encoding.decodePath polyline
-		tragicace.map.draw_path map, path
+		tragicace.map.draw_path map, path, '#42826C'
 		bounds = tragicace.map.get_bounds path
 		map.fitBounds(bounds)

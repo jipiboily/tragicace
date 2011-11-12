@@ -21,7 +21,7 @@ window.map;
 						tragicace.map.set_icon_on_path data
 						map = tragicace.map.show_points data
 						path =  google.maps.geometry.encoding.decodePath data.encodedPolyline
-						tragicace.map.draw_path map, path
+						tragicace.map.draw_path map, path, '#C84663'
 						bounds = tragicace.map.get_bounds path
 						map.fitBounds(bounds)
 						tragicace.list.populate data
@@ -91,12 +91,12 @@ window.map;
     ne = new google.maps.LatLng(maxLatitude, maxLongitude)
     new google.maps.LatLngBounds(sw, ne)
 
-  tragicace.map.draw_path = (map, path) ->
+  tragicace.map.draw_path = (map, path, color) ->
     polyline = new google.maps.Polyline(
       path: path
-      strokeColor: "#FF0000"
-      strokeOpacity: 1.0
-      strokeWeight: 2
+      strokeColor: color
+      strokeOpacity: 0.85
+      strokeWeight: 4
     )
     polyline.setMap map
 
