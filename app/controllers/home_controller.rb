@@ -24,7 +24,7 @@ class HomeController < ApplicationController
   
   private
     def geo_svc_url
-      URI.parse('http://50.57.46.42')
+      URI.parse('http://50.57.44.203')
     end
     
     def geo_svc_res get_url
