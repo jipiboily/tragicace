@@ -5,49 +5,51 @@ window.tragicace.map = {}
 
 window.map;
 (window.tragicace = ->
-	tragicace.get_travaux_between = (from, to) ->
-		post_data = {from: from, to: to}
-		$.ajax
-			data: post_data
-			url: "geo_svc/travaux_between"
-			dataType: "json"
-			error: (data) ->
-				alert data.responseText
-			success: (data) ->
-				if(data.status != undefined)
-					alert "Erreur Google Map: " + data.status
-				else
-					if data[0] != undefined
-						tragicace.map.set_icon_on_path data
-						map = tragicace.map.show_points data
-						path =  google.maps.geometry.encoding.decodePath data.encodedPolyline
-						tragicace.map.draw_path map, path, '#C84663'
-						bounds = tragicace.map.get_bounds path
-						map.fitBounds(bounds)
-						tragicace.list.populate data
+    tragicace.get_travaux_between = (from, to) ->
+        post_data = {from: from, to: to}
+        $.ajax
+            data: post_data
+            url: "geo_svc/travaux_between"
+            dataType: "json"
+            error: (data) ->
+                alert data.responseText
+            success: (data) ->
+                if(data.status != undefined)
+                    alert "Erreur Google Map: " + data.status
+                else
+                    if data[0] != undefined
+                        tragicace.map.set_icon_on_path data
+                        map = tragicace.map.show_points data
+                        path =  google.maps.geometry.encoding.decodePath data.encodedPolyline
+                        tragicace.map.draw_path map, path, '#C84663', 6
+                        alternativePath =  google.maps.geometry.encoding.decodePath data.encodedPolylineAlternative
+                        tragicace.map.draw_path map, alternativePath, '#42826C', 4
+                        bounds = tragicace.map.get_bounds path
+                        map.fitBounds(bounds)
+                        tragicace.list.populate data
 )()
 
 (window.tragicace.list = ->
-	tragicace.list.populate = (points) ->
-    i = 0
-    content = ""
-    point = points[i]
-    while point != undefined && point.id != undefined
-      endroit = if point.endroit == null then "???" else point.endroit
-      content += "<div>"
-      content += "<h1>" + endroit + "</h1>"
-      content += "<h3>Du " + point.date_debut + " au " + point.date_fin + "</h3>"
-      content += "<p>"
-      content += "<br/><strong>Arrondissement: </strong>" + point.arrondissement
-      content += "<br/><strong>Emplacement: </strong>" + point.emplacement
-      content += "<br/><strong>Restriction: </strong>" + point.restriction
-      content += "<br/><strong>Nature des travaux: </strong>" + point.nature_travaux
-      content += "</p>"
-      content += "</div>"
-      i++
-      point = points[i]
-    $("#liste").html content
-)()
+    tragicace.list.populate = (points) ->
+        i = 0
+        content = ""
+        point = points[i]
+        while point != undefined && point.id != undefined
+          endroit = if point.endroit == null then "???" else point.endroit
+          content += "<div>"
+          content += "<h1>" + endroit + "</h1>"
+          content += "<h3>Du " + point.date_debut + " au " + point.date_fin + "</h3>"
+          content += "<p>"
+          content += "<br/><strong>Arrondissement: </strong>" + point.arrondissement
+          content += "<br/><strong>Emplacement: </strong>" + point.emplacement
+          content += "<br/><strong>Restriction: </strong>" + point.restriction
+          content += "<br/><strong>Nature des travaux: </strong>" + point.nature_travaux
+          content += "</p>"
+          content += "</div>"
+          i++
+          point = points[i]
+        $("#liste").html content
+    )()
 (tragicace.map = ->
   tragicace.map.init = ->
     center = new google.maps.LatLng(46.815876, -71.28156)
@@ -67,7 +69,7 @@ window.map;
     i = 0
     point = points[i]
     while point != undefined && point.id != undefined
-      google.maps.event.trigger map, "bidon_set_icon", point.id, 'images/closedroad.png'
+      google.maps.event.trigger map, "bidon_set_icon", point.id, 'assets/closedroad.png'
       i++
       point = points[i]
 
@@ -91,12 +93,12 @@ window.map;
     ne = new google.maps.LatLng(maxLatitude, maxLongitude)
     new google.maps.LatLngBounds(sw, ne)
 
-  tragicace.map.draw_path = (map, path, color) ->
+  tragicace.map.draw_path = (map, path, color, width) ->
     polyline = new google.maps.Polyline(
       path: path
       strokeColor: color
       strokeOpacity: 0.85
-      strokeWeight: 4
+      strokeWeight: width
     )
     polyline.setMap map
 
@@ -162,4 +164,4 @@ window.map;
 )()
 
 $(document).ready ->
-	google.maps.event.addDomListener window, "load", tragicace.map.init()
+    google.maps.event.addDomListener window, "load", tragicace.map.init()

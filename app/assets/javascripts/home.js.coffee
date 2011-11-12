@@ -19,6 +19,6 @@ $(document).ready ->
 		polyline =  $('#polyline').val().replace(/\\\\/g, "\\")
 
 		path =  google.maps.geometry.encoding.decodePath polyline
-		tragicace.map.draw_path map, path, '#42826C'
+		tragicace.map.draw_path map, path, '#42826C', 4
 		bounds = tragicace.map.get_bounds path
 		map.fitBounds(bounds)

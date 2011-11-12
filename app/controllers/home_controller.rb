@@ -7,39 +7,39 @@ class HomeController < ApplicationController
   end
 
   def randomLatLon
-    url = URI.parse('http://mapcoop.org')
+    url = URI.parse('http://50.57.46.42')
     res = Net::HTTP.start(url.host, url.port) {|http|
-        http.get('/tragicace/randomLatLon.php?nb=300')
+        http.get('/services/tragicace/randomLatLon.php?nb=300')
     }
 
     render :json => res.body
   end
   
   def all_travaux
-    url = URI.parse('http://mapcoop.org')
+    url = URI.parse('http://50.57.46.42')
     res = Net::HTTP.start(url.host, url.port) {|http|
-        http.get('/tragicace/get_all_travaux.php')
+        http.get('/services/tragicace/get_all_travaux.php')
     }
 
     render :json => res.body    
   end
   
   def get_travail_detail
-    url = URI.parse('http://mapcoop.org')
+    url = URI.parse('http://50.57.46.42')
     res = Net::HTTP.start(url.host, url.port) {|http|
-        http.get('/tragicace/get_travail.php?id=' + params[:id].to_i.to_s)
+        http.get('/services/tragicace/get_travail.php?id=' + params[:id].to_i.to_s)
     }
     
     render :json => res.body
   end
   
   def travaux_between
-    geo_svc_render("/tragicace/get_travaux_between_two_places.php?start=#{params[:from]}&end=#{params[:to]}")
+    geo_svc_render("/services/tragicace/get_travaux_between_two_places_v2.php?start=#{params[:from]}&end=#{params[:to]}")
   end
   
   private
     def geo_svc_url
-      URI.parse('http://mapcoop.org')
+      URI.parse('http://50.57.46.42')
     end
     
     def geo_svc_res get_url
