@@ -7,30 +7,15 @@ class HomeController < ApplicationController
   end
 
   def randomLatLon
-    url = URI.parse('http://50.57.46.42')
-    res = Net::HTTP.start(url.host, url.port) {|http|
-        http.get('/services/tragicace/randomLatLon.php?nb=300')
-    }
-
-    render :json => res.body
+    geo_svc_render('/services/tragicace/randomLatLon.php?nb=300')
   end
   
   def all_travaux
-    url = URI.parse('http://50.57.46.42')
-    res = Net::HTTP.start(url.host, url.port) {|http|
-        http.get('/services/tragicace/get_all_travaux.php')
-    }
-
-    render :json => res.body    
+    geo_svc_render('/services/tragicace/get_all_travaux.php')
   end
   
   def get_travail_detail
-    url = URI.parse('http://50.57.46.42')
-    res = Net::HTTP.start(url.host, url.port) {|http|
-        http.get('/services/tragicace/get_travail.php?id=' + params[:id].to_i.to_s)
-    }
-    
-    render :json => res.body
+    geo_svc_render('/services/tragicace/get_travail.php?id=' + params[:id].to_i.to_s)
   end
   
   def travaux_between
