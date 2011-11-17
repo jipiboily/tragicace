@@ -26,7 +26,7 @@ class HomeController < ApplicationController
     geo_svc_render("/services/tragicace/is_travaux_on_polyline.php?encodedpoly=#{params[:encode_polyline]}")
   end
   
-  def is_travaux_on_polyline
+  def get_travaux_roads_on_polyline
     geo_svc_render("/services/tragicace/get_travaux_roads_on_polyline.php?encodedpoly=#{params[:encode_polyline]}")
   end
   
