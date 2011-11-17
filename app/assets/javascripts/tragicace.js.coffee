@@ -2,11 +2,11 @@ window.tragicace = {}
 window.tragicace.list = {}
 window.tragicace.map = {}
 
-window.okPolyline = null
-window.errorPolyline = null
+#window.okPolyline = null
+#window.errorPolyline = null
 
 window.map;
-
+window.directionsDisplay = new google.maps.DirectionsRenderer()
 window.directionsService = new google.maps.DirectionsService()
 
 (window.tragicace = ->
@@ -19,15 +19,16 @@ window.directionsService = new google.maps.DirectionsService()
             error: (data) ->
                 alert data.responseText
             success: (data) ->
+                tragicace.map.set_directions from, to
                 if(data.status != undefined)
                     alert "Erreur Google Map: " + data.status
                 else
                     if data[0] != undefined
-                        tragicace.map.set_icon_on_path data
-                        map = tragicace.map.show_points data
+#                        tragicace.map.set_icon_on_path data
+                        tragicace.map.show_points data
                         tragicace.list.populate data
 
-                    tragicace.map.set_directions from, to
+
 #                    map = window.map
 
 #                    window.okPolyline.setMap(null) if window.okPolyline
@@ -121,7 +122,7 @@ window.directionsService = new google.maps.DirectionsService()
     polyline
     
   tragicace.map.set_directions = (start, end) ->
-    directionsDisplay = new google.maps.DirectionsRenderer()
+    directionsDisplay = window.directionsDisplay
     myOptions =
       zoom: 7
       mapTypeId: google.maps.MapTypeId.ROADMAP

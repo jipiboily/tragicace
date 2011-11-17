@@ -21,6 +21,14 @@ class HomeController < ApplicationController
   def travaux_between
     geo_svc_render("/services/tragicace/get_travaux_between_two_places_v2.php?start=#{params[:from]}&end=#{params[:to]}")
   end
+
+  def is_travaux_on_polyline
+    geo_svc_render("/services/tragicace/is_travaux_on_polyline.php?encodedpoly=#{params[:encode_polyline]}")
+  end
+  
+  def is_travaux_on_polyline
+    geo_svc_render("/services/tragicace/get_travaux_roads_on_polyline.php?encodedpoly=#{params[:encode_polyline]}")
+  end
   
   private
     def geo_svc_url
