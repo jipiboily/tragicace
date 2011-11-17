@@ -146,7 +146,16 @@ window.directionsService = new google.maps.DirectionsService()
         error: (data) ->
           alert data
         success: (data) ->
-          alert data
+          if parseInt(data.code, 10)
+            $.ajax
+              data:
+                encoded_polyline: response.routes[0].overview_polyline.points
+              url: "geo_svc/get_travaux_roads_on_polyline"
+              dataType: "json"
+              error: (data) ->
+                alert data
+              success: (data) ->
+                alert data["listeNomRue"]
       directionsDisplay.setDirections(response)  if status is google.maps.DirectionsStatus.OK
 
   tragicace.map.show_points = (points) ->
