@@ -12,14 +12,17 @@ window.directionsService = new google.maps.DirectionsService()
 (window.tragicace = ->
     tragicace.get_travaux_between = (from, to) ->
         post_data = {from: from, to: to}
+        tragicace.map.set_directions from, to
+        
+        
         $.ajax
             data: post_data
             url: "geo_svc/travaux_between"
             dataType: "json"
             error: (data) ->
-                alert data.responseText
+#                alert data.responseText
             success: (data) ->
-                tragicace.map.set_directions from, to
+                
                 if(data.status != undefined)
                     alert "Erreur Google Map: " + data.status
                 else
@@ -135,6 +138,15 @@ window.directionsService = new google.maps.DirectionsService()
       travelMode: google.maps.DirectionsTravelMode.DRIVING
     
     directionsService.route request, (response, status) ->
+      $.ajax
+        data:
+          encoded_polyline: response.routes[0].overview_polyline.points
+        url: "geo_svc/is_travaux_on_polyline"
+        dataType: "json"
+        error: (data) ->
+          alert data
+        success: (data) ->
+          alert data
       directionsDisplay.setDirections(response)  if status is google.maps.DirectionsStatus.OK
 
   tragicace.map.show_points = (points) ->

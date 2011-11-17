@@ -3,6 +3,8 @@ Tragicace::Application.routes.draw do
   get "geo_svc/all_travaux" => "home#all_travaux"
   get "geo_svc/travail_detail/:id" => "home#get_travail_detail"
   get "geo_svc/travaux_between" => "home#travaux_between"
+  get 'geo_svc/is_travaux_on_polyline' => "home#is_travaux_on_polyline"
+  get 'geo_svc/get_travaux_roads_on_polyline' => "home#get_travaux_roads_on_polyline"
   get 'home/randomLatLon'
 
   # The priority is based upon order of creation:

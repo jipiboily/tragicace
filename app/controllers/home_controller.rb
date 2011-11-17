@@ -23,16 +23,17 @@ class HomeController < ApplicationController
   end
 
   def is_travaux_on_polyline
-    geo_svc_render("/services/tragicace/is_travaux_on_polyline.php?encodedpoly=#{params[:encode_polyline]}")
+    geo_svc_render("/services/tragicace/is_travaux_on_polyline.php?encodedpoly=#{params[:encoded_polyline]}")
+    logger.debug "/services/tragicace/is_travaux_on_polyline.php?encodedpoly=#{params[:encoded_polyline]}"
   end
   
   def get_travaux_roads_on_polyline
-    geo_svc_render("/services/tragicace/get_travaux_roads_on_polyline.php?encodedpoly=#{params[:encode_polyline]}")
+    geo_svc_render("/services/tragicace/get_travaux_roads_on_polyline.php?encodedpoly=#{params[:encoded_polyline]}")
   end
   
   private
     def geo_svc_url
-      URI.parse('http://50.57.44.203')
+      URI.parse('http://mapcoop.org')
     end
     
     def geo_svc_res get_url
