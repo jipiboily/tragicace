@@ -155,7 +155,7 @@ window.directionsService = new google.maps.DirectionsService()
               error: (data) ->
                 alert data
               success: (data) ->
-                tragicace.map.findRoad start, end, data["listeNomRue"]
+                tragicace.map.findRoad start, end, data["listeNomRue"].reverse()
           else
             directionsDisplay.setDirections(response)  if status is google.maps.DirectionsStatus.OK
 
