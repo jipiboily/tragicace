@@ -155,8 +155,43 @@ window.directionsService = new google.maps.DirectionsService()
               error: (data) ->
                 alert data
               success: (data) ->
-                alert data["listeNomRue"]
-      directionsDisplay.setDirections(response)  if status is google.maps.DirectionsStatus.OK
+                tragicace.map.findRoad start, end, data["listeNomRue"]
+          else
+            directionsDisplay.setDirections(response)  if status is google.maps.DirectionsStatus.OK
+
+  tragicace.map.findRoad = (start, end, listeNomRue) ->
+    tragicace.map.tryRoad start, end, listeNomRue.pop(), (newPath) ->
+      if newPath?
+        directionsDisplay.setDirections(newPath)
+      else 
+        if listeNomRue.length > 0
+          tragicace.map.findRoad start, end, listeNomRue
+        else
+          alert 'no solution'
+
+  tragicace.map.tryRoad = (start, end, streetName, callback) ->
+    request =
+      origin: start
+      destination: end
+      waypoints: [
+        location: streetName + ', Quebec, QC'
+        stopover: false
+      ]
+      travelMode: google.maps.DirectionsTravelMode.DRIVING
+
+    newPolyline = null
+    noConstructions = null
+
+    directionsService.route request, (response, status) ->
+      $.ajax
+        data:
+          encoded_polyline: newPolyline = response.routes[0].overview_polyline.points
+        url: "geo_svc/is_travaux_on_polyline"
+        dataType: "json"
+        error: (data) ->
+          alert 'error is_travaux_on_polyline'
+        success: (data) ->
+          callback(response if data.code == 0)
 
   tragicace.map.show_points = (points) ->
     markers = []
